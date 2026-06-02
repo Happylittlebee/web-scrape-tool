@@ -1,0 +1,22 @@
+# Common ignores
+.DS_Store
+ Thumbs.db
+*.log
+*.tmp
+*.swp
+*~
+
+# Editor directories
+.idea/
+.vscode/
+*.sublime-*
+
+# Build outputs
+dist/
+build/
+out/
+
+# Dependencies
+node_modules/
+venv/
+.env
