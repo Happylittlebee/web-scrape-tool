@@ -1,6 +1,6 @@
 # Common ignores
 .DS_Store
- Thumbs.db
+Thumbs.db
 *.log
 *.tmp
 *.swp
@@ -16,7 +16,20 @@ dist/
 build/
 out/
 
-# Dependencies
-node_modules/
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+env/
 venv/
+backend/__pycache__/
+backend/*/__pycache__/
+
+# Frontend
+node_modules/
+*.local
+
+# Environment
 .env
+.env.local
