@@ -1,21 +1,13 @@
 import requests
 from config import Config
 
+PROXIES = {
+    "http": "http://127.0.0.1:7897",
+    "https": "http://127.0.0.1:7897",
+}
+
 
 def analyze_content(content: str) -> str:
-    """
-    调用 AI API 分析网页内容并生成总结。
-
-    Args:
-        content: 网页正文内容（限制 5000 字符）
-
-    Returns:
-        str: AI 生成的总结内容
-
-    Raises:
-        Exception: AI 服务不可用时抛出
-    """
-    # 截断内容
     content = content[:5000]
 
     if Config.AI_PROVIDER == "minimax":
@@ -25,14 +17,13 @@ def analyze_content(content: str) -> str:
 
 
 def _analyze_with_minimax(content: str) -> str:
-    """使用 Minimax API 分析内容"""
     headers = {
         "Authorization": f"Bearer {Config.MINIMAX_API_KEY}",
         "Content-Type": "application/json",
     }
 
     payload = {
-        "model": "minimax",
+        "model": "MiniMax-M2.7",
         "messages": [
             {
                 "role": "user",
@@ -43,12 +34,17 @@ def _analyze_with_minimax(content: str) -> str:
     }
 
     response = requests.post(
-        f"{Config.MINIMAX_API_URL}/text/chatcompletion_v2",
+        f"{Config.MINIMAX_API_URL}/messages",
         headers=headers,
         json=payload,
+        proxies=PROXIES,
         timeout=30,
     )
     response.raise_for_status()
 
     result = response.json()
-    return result.get("choices", [{}])[0].get("message", {}).get("content", "分析失败")
+    content_list = result.get("content", [])
+    for item in content_list:
+        if item.get("type") == "text":
+            return item.get("text", "分析失败")
+    return "分析失败"

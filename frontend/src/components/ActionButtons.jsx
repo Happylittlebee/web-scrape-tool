@@ -1,9 +1,14 @@
 import { downloadContent } from "../services/api";
 
-export function ActionButtons({ content, title, onAnalyze, isAnalyzing }) {
+export function ActionButtons({ content, html, title, onAnalyze, isAnalyzing }) {
   const handleDownload = (format) => {
-    if (!content) return;
-    downloadContent(content, title || "untitled", format);
+    if (format === "html") {
+      if (!html) return;
+      downloadContent(html, title || "untitled", "html");
+    } else {
+      if (!content) return;
+      downloadContent(content, title || "untitled", format);
+    }
   };
 
   return (
@@ -15,6 +20,9 @@ export function ActionButtons({ content, title, onAnalyze, isAnalyzing }) {
         </button>
         <button onClick={() => handleDownload("txt")} disabled={!content}>
           TXT
+        </button>
+        <button onClick={() => handleDownload("html")} disabled={!html}>
+          HTML
         </button>
       </div>
       <button className="analyze-btn" onClick={onAnalyze} disabled={!content || isAnalyzing}>

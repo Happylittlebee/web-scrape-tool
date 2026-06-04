@@ -48,6 +48,7 @@ function App() {
             <ContentPreview content={result.content} />
             <ActionButtons
               content={result.content}
+              html={result.html}
               title={result.title}
               onAnalyze={handleAnalyze}
               isAnalyzing={analyzeLoading}

@@ -1,12 +1,12 @@
 # Web Scraper Tool
 
-一个简洁的网页内容爬取工具，支持内容预览、格式下载和 AI 智能分析。
+一个简洁的网页内容爬取工具，支持内容预览、多格式下载和 AI 智能分析。
 
 ## 功能特性
 
 - 输入链接，自动爬取网页内容
 - 内容实时预览
-- 多格式下载（Markdown / TXT）
+- 多格式下载（Markdown / TXT / HTML）
 - AI 驱动的网页内容分析总结
 
 ## 技术栈
@@ -15,8 +15,8 @@
 |------|------|
 | 前端 | React 18 + Vite |
 | 后端 | Flask |
-| 爬虫 | requests + BeautifulSoup4 |
-| AI 分析 | Minimax API（支持多模型扩展） |
+| 爬虫 | Playwright (Chromium) + BeautifulSoup4 |
+| AI 分析 | Minimax API (Claude 兼容格式) |
 
 ## 项目结构
 
@@ -25,19 +25,20 @@ web-scraper-tool/
 ├── backend/
 │   ├── app.py
 │   ├── config.py
+│   ├── .env
 │   ├── requirements.txt
 │   ├── routes/
-│   │   ├── __init__.py               # 路由包初始化
+│   │   ├── __init__.py
 │   │   ├── scrape.py
 │   │   ├── analyze.py
 │   │   └── download.py
 │   ├── services/
-│   │   ├── __init__.py               # 服务包初始化
+│   │   ├── __init__.py
 │   │   ├── scraper_service.py
 │   │   ├── analyzer_service.py
 │   │   └── converter_service.py
 │   └── utils/
-│       ├── __init__.py               # 工具包初始化
+│       ├── __init__.py
 │       ├── html_parser.py
 │       └── text_cleaner.py
 ├── frontend/
@@ -50,84 +51,56 @@ web-scraper-tool/
 │       ├── App.css
 │       ├── components/
 │       ├── hooks/
-│       ├── services/
-│       └── utils/
+│       └── services/
 └── README.md
 ```
 
 ## 快速开始
 
 ### 1. 克隆项目
-
 ```bash
 git clone <repository-url>
 cd web-scraper-tool
 ```
 
 ### 2. 安装后端依赖
-
 ```bash
 cd backend
 pip install -r requirements.txt
+playwright install chromium
 ```
 
 ### 3. 配置环境变量
-
-在 `backend/` 目录下创建 `.env` 文件：
-
+创建 `backend/.env` 文件：
 ```env
 AI_PROVIDER=minimax
-MINIMAX_API_KEY=your_api_key_here
-MINIMAX_API_URL=https://api.minimax.chat/v1
+MINIMAX_API_KEY=your_key_here
+MINIMAX_API_URL=https://api.minimaxi.com/anthropic/v1
 FLASK_PORT=5000
+PROXY_PORT=7897
 ```
 
 ### 4. 启动后端
-
 ```bash
 python app.py
 ```
-
 后端运行在 `http://localhost:5000`
 
-### 5. 安装前端依赖并启动
-
+### 5. 启动前端
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-
 前端运行在 `http://localhost:5173`
-
-### 6. 配置 AI 模型
-
-在 `.env` 文件中配置使用的 AI API：
-
-```env
-# Minimax API（当前默认）
-AI_PROVIDER=minimax
-MINIMAX_API_KEY=your_api_key_here
-MINIMAX_API_URL=https://api.minimax.chat/v1
-
-# 后续可扩展为 OpenAI / Claude 等
-# AI_PROVIDER=openai
-# OPENAI_API_KEY=your_api_key_here
-```
 
 ## API 文档
 
 ### POST /api/scrape
-
-爬取网页内容
-
-**请求体：**
+**请求：**
 ```json
-{
-  "url": "https://example.com"
-}
+{"url": "https://example.com"}
 ```
-
 **响应：**
 ```json
 {
@@ -141,47 +114,36 @@ MINIMAX_API_URL=https://api.minimax.chat/v1
 ```
 
 ### POST /api/analyze
-
-AI 分析网页内容
-
-**请求体：**
+**请求：**
 ```json
-{
-  "content": "网页正文内容"
-}
+{"content": "网页正文内容"}
 ```
-
 **响应：**
 ```json
 {
   "success": true,
-  "data": {
-    "summary": "AI 生成的分析总结"
-  }
+  "data": {"summary": "AI 分析总结"}
 }
 ```
 
 ### POST /api/download
-
-下载网页内容
-
-**请求体：**
+**请求：**
 ```json
 {
-  "content": "网页正文内容",
+  "content": "正文内容",
+  "html": "原始 HTML（可选）",
   "title": "页面标题",
-  "format": "markdown" | "txt"
+  "format": "markdown" | "txt" | "html"
 }
 ```
-
 **响应：** 文件流
 
-## 开发说明
+## 注意事项
 
-- 前端开发使用 Vite 热更新，无需重启
-- 后端修改后自动重载（启用 debug 模式）
-- API 请求统一通过 `frontend/src/services/api.js` 封装
+- 爬虫使用 Playwright，需安装 Chromium 并确保代理正常
+- 百度/知乎等网站有强反爬机制，可能无法爬取
+- HTML 下载可获取原始页面（保留完整格式）
+- AI 分析使用 Claude 兼容格式，需使用正确的 API Key
 
 ## 许可证
-
 MIT

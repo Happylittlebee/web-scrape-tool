@@ -13,10 +13,11 @@ def download():
         return jsonify({"success": False, "error": "请求体不能为空"}), 400
 
     content = data.get("content", "").strip()
+    html = data.get("html", "").strip()
     title = data.get("title", "untitled")
     fmt = data.get("format", "txt").lower()
 
-    if not content:
+    if not content and not html:
         return jsonify({"success": False, "error": "内容不能为空"}), 400
 
     # 生成安全文件名
@@ -32,6 +33,10 @@ def download():
             file_content = convert_to_txt(content, title)
             mimetype = "text/plain"
             ext = "txt"
+        elif fmt == "html":
+            file_content = html
+            mimetype = "text/html; charset=utf-8"
+            ext = "html"
         else:
             return jsonify({"success": False, "error": "不支持的下载格式"}), 400
 
