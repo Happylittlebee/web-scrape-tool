@@ -47,11 +47,23 @@ npm run dev                    # 启动前端 http://localhost:5173
 
 ### 环境变量 (backend/.env)
 ```
+# AI 提供商：minimax / openai / claude 等
 AI_PROVIDER=minimax
-MINIMAX_API_KEY=sk-cp-xxx      # Claude Code 同款 Key
+
+# AI API Key（必填）
+MINIMAX_API_KEY=your_key_here
+
+# AI API URL（根据提供商填写）
+# Minimax: https://api.minimaxi.com/anthropic/v1
+# OpenAI: https://api.openai.com/v1
+# Claude: https://api.anthropic.com/v1
 MINIMAX_API_URL=https://api.minimaxi.com/anthropic/v1
+
+# Flask 端口（默认 5000）
 FLASK_PORT=5000
-PROXY_PORT=7897                # 代理端口（翻墙用）
+
+# 代理端口（如需访问外网则配置）
+PROXY_PORT=7897
 ```
 
 ## 技术栈

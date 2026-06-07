@@ -55,7 +55,7 @@ web-scraper-tool/
 └── README.md
 ```
 
-## 快速开始
+## 使用说明
 
 ### 1. 克隆项目
 ```bash
@@ -73,10 +73,22 @@ playwright install chromium
 ### 3. 配置环境变量
 创建 `backend/.env` 文件：
 ```env
+# AI 提供商：minimax / openai / claude 等
 AI_PROVIDER=minimax
+
+# AI API Key（必填，请根据你的提供商获取）
 MINIMAX_API_KEY=your_key_here
+
+# AI API URL（根据提供商填写，这里以minimax m2.7举例）
+# Minimax: https://api.minimaxi.com/anthropic/v1
+# OpenAI: https://api.openai.com/v1
+# Claude: https://api.anthropic.com/v1
 MINIMAX_API_URL=https://api.minimaxi.com/anthropic/v1
+
+# Flask 端口（默认 5000）
 FLASK_PORT=5000
+
+# 代理端口（如需访问外网则配置，根据本地代理软件填写）
 PROXY_PORT=7897
 ```
 
@@ -102,6 +114,7 @@ npm run dev
 {"url": "https://example.com"}
 ```
 **响应：**
+
 ```json
 {
   "success": true,
@@ -145,5 +158,3 @@ npm run dev
 - HTML 下载可获取原始页面（保留完整格式）
 - AI 分析使用 Claude 兼容格式，需使用正确的 API Key
 
-## 许可证
-MIT
